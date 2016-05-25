@@ -1,0 +1,68 @@
+/*
+Regular Expression Matching
+Implement regular expression matching with support for '.' and '*'.
+'.' matches any single character. '*' matches zero or more of the preceding element.
+The matching should cover the entire input string (not partial).
+The function prototype should be:
+boolean isMatch(String str1, String str2)
+Some examples:
+isMatch("aa","a")-->false
+isMatch("aa","aa")-->true
+isMatch("aaa","aa")-->false
+isMatch("aa","a*")-->true
+isMatch("aa",".*")-->true
+isMatch("ab",".*")-->true
+isMatch("aab","c*a*b")-->true
+ */
+
+import java.io.*;
+import java.util.*;
+
+public class RegExpMatch {
+    public static void main(String[] args){
+	String str1="abcdef";
+	String str2=".*";
+	System.out.println(isMatch(str1,str2));	
+    }
+    //'.' matches any single character
+    //'*' matches zero or more of the preceding element
+
+    public static boolean isMatch(String str1,String str2){
+	/*
+	if(str1.length()==0&&str2.length()==0){
+	    return true;
+	}
+	*/
+	int str1_len=str1.length();
+	int str2_len=str2.length();
+	if(str2_len==0)
+	    return str1_len==0;
+	if(str2_len==1){
+	    if(str1_len==1&&(str1.charAt(0)==str2.charAt(0)||str2.charAt(0)=='.')){
+	       return true;
+	    }else {
+	       return false;
+	    }
+	}
+	
+	
+	//1.p[j+1]!='*': if s[i]!=p[j] return false; else isMatch(str1*,str2*);
+	//2.p[j+1]=='*': if s[i]!=p[j] isMatch(str1*,str2*);else isMatch(str1+++,str2*);
+	    if(str2.charAt(1)!='*'){
+		if(str1_len==1||(str1.charAt(0)!=str2.charAt(0)&&str2.charAt(0)!='.')){
+		    return false;
+		}else{
+		    return isMatch(str1.substring(1),str2.substring(1));
+		}		 
+	    }
+
+	    while(str1.length()>0&&(str1.charAt(0)==str2.charAt(0)||str2.charAt(0)=='.')){
+		if(isMatch(str1.substring(1),str2.substring(2))){
+			return true;
+		}
+		str1=str1.substring(1);
+		
+	    }
+	    return isMatch(str1,str2.substring(2));
+    }
+}
